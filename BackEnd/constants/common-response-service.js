@@ -1,8 +1,7 @@
-const { Response } = require('express');
 const { RESPONSE_STATUS_CODES } = require('./common-status-codes');
 
 function successResponse(message, DATA, res) {
-  res.status(RESPONSE_STATUS_CODES.SUCCESS).json({
+  return res.status(RESPONSE_STATUS_CODES.SUCCESS).json({
     STATUS: 'SUCCESS',
     MESSAGE: message,
     SUCCESS: true,
@@ -11,14 +10,14 @@ function successResponse(message, DATA, res) {
 }
 
 function failureResponse(message, res) {
-  res.status(RESPONSE_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+  return res.status(RESPONSE_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
     STATUS: 'FAILURE',
     MESSAGE: message,
   });
 }
 
-function insufficientParameters(res,parameter) {
-  res.status(RESPONSE_STATUS_CODES.BAD_REQUEST).json({
+function insufficientParameters(res, parameter) {
+  return res.status(RESPONSE_STATUS_CODES.BAD_REQUEST).json({
     STATUS: 'FAILURE',
     MESSAGE: 'Insufficient parameters',
     PARAMETER: parameter,
@@ -27,7 +26,7 @@ function insufficientParameters(res,parameter) {
 }
 
 function duplicateDocuments(res) {
-  res.status(RESPONSE_STATUS_CODES.DUPLICATE).json({
+  return res.status(RESPONSE_STATUS_CODES.DUPLICATE).json({
     STATUS: 'FAILURE',
     MESSAGE: 'Duplicate Documents',
     SUCCESS: false,
@@ -36,7 +35,7 @@ function duplicateDocuments(res) {
 }
 
 function mongoError(err, res) {
-  res.status(RESPONSE_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+  return res.status(RESPONSE_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
     STATUS: 'FAILURE',
     MESSAGE: 'MongoDB error',
     DATA: err,
@@ -44,15 +43,15 @@ function mongoError(err, res) {
 }
 
 function notfoundDocument(res) {
-  res.status(RESPONSE_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+  return res.status(RESPONSE_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
     STATUS: 'FAILURE',
-    MESSAGE: 'Not Data Found',
+    MESSAGE: 'No Data Found',
     SUCCESS: false,
   });
 }
 
 function forbiddenError(res, message) {
-  res.status(RESPONSE_STATUS_CODES.FORBIDDEN).json({
+  return res.status(RESPONSE_STATUS_CODES.FORBIDDEN).json({
     STATUS: 'FORBIDDEN',
     MESSAGE: message,
     SUCCESS: false,

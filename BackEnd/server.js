@@ -25,18 +25,8 @@ mongoose
   .connect(URL)
   .then(async () => {
     console.log("Database connected");
-
-    // Run your function here
-    await fun();
   })
   .catch((err) => console.log("Database not connected", err));
-
-async function fun() {
-  const number = await TimeSlot.countDocuments();
-  if (number <= 0) {
-    await TimeSloatcontrolaer.GenerateTimeSlots();
-  }
-}
 
 // Routes
 app.use("/auth", authRouter);
