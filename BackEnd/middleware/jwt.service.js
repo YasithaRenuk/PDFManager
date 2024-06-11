@@ -20,7 +20,8 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
 
-    if (token == null) return res.sendStatus(401);
+    // Handle the case where the Authorization header is missing
+    if (token == null) return  res.status(401).json({ message: 'Unauthorized: Token is Missing, Please Login Again' });
 
     jwt.verify(
       token,
