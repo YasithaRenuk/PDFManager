@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 const PDFRegisterSchema = new Schema({
     OwnerEmail:{
         type:String,
-        unique:true,
         require:true
     },
     FilePath:{
