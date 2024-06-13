@@ -8,6 +8,7 @@ const PDFRegister = require("../models/PDFRegister");
 const { fileSizeFormatter } = require("../helpers/FileSizeFormatter.helper");
 
 const singleFileUpload = async (req, res) => {
+  try {
     if (!req.file) {
       return insufficientParameters(res, "No file uploaded File Not Found");
     }
