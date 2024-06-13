@@ -7,7 +7,7 @@ const {authenticateToken} = require("../middleware/jwt.service")
 
 const{singleFileUpload} = require("../controllers/PDFregister.controller");
 
-router.post("/singalfile",upload.single('file'),authenticateToken,singleFileUpload)
+router.post("/singalfile",authenticateToken,upload.single('file'),singleFileUpload)
 
 
 

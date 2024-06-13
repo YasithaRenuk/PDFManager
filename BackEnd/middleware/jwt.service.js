@@ -1,53 +1,50 @@
-const { Response } = require('express');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const generateAccessToken = (userID,usertype) => {
-  // token will be expired within 2hrs
+const generateAccessToken = (Email, usertype) => {
+  // token will be expired within 2 hours
   const token = jwt.sign(
     {
-      id: userID,
-      usertype : usertype
+      Email: Email,
+      usertype: usertype
     },
     process.env.TOKEN_SECRET,
-    { expiresIn: 60 * 60 }
+    { expiresIn: 2 * 60 * 60 } // 2 hours in seconds
   );
   return token;
 };
 
 const authenticateToken = (req, res, next) => {
-  try{
+  try {
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
 
     // Handle the case where the Authorization header is missing
-    if (token == null) return  res.status(401).json({ message: 'Unauthorized: Token is Missing, Please Login Again' });
+    if (token == null) {
+      return res.status(401).json({ message: 'Unauthorized: Token is Missing, Please Login Again' });
+    }
 
-    jwt.verify(
-      token,
-      process.env.TOKEN_SECRET,
-      (err, user) => {
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+      if (err) {
         console.log(err);
-        
-        if (err) return res.sendStatus(403);
-
-        const userType = user.usertype;
-        
-        //Check the user type here
-        if (userType == 'admin' || userType == 'faculty' || userType == 'student') {
-          return res.sendStatus(403);
-        }
-
-        req.user = user;
-        req.userType = userType
-
-        next();
+        return res.status(403).json({ message: 'Forbidden: Invalid Token' });
       }
-    );
-    
-  }catch(error){
-    console.log(error)
+
+      const userType = user.usertype;
+      // Check the user type here
+      if (userType !== 'admin' && userType !== 'user') {
+        return res.status(401).json({ message: 'Unauthorized: UserType Mismatch' });
+      }
+
+      req.user = user;
+      req.userType = userType;
+
+      next();
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 

@@ -6,8 +6,10 @@ const singleFileUpload = async (req, res, next) => {
         if (!req.file) {
             return res.status(400).send('No file uploaded');
         }
-
+        const user = req.user;
+        
         const file = new PDFRegister({
+            OwnerEmail: user.Email,
             FileName: req.file.originalname,
             FilePath: req.file.path,
             FileSize: fileSizeFormatter(req.file.size, 2)

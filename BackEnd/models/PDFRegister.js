@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const PDFRegisterSchema = new Schema({
-    OrnaerEmail:{
+    OwnerEmail:{
         type:String,
         unique:true,
         require:true
