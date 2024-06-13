@@ -1,5 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
+const morgan = require('morgan')
+const fs = require('fs')
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -14,6 +16,8 @@ const app = express();
 const PORT = process.env.PORT || 8070;
 const URL = process.env.MONGODB_URL;
 
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'),{flag:'a'})
+
 // Middleware
 app.use(cors({
   origin: 'http://localhost:5173', // Replace with your frontend URL
@@ -21,6 +25,7 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :date[web]',{stream:accessLogStream}))  
 
 // Database connection
 mongoose.connect(URL)
