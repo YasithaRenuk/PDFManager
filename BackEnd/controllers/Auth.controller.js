@@ -10,7 +10,7 @@ const test = (req, res) => {
 // Register endpoint
 const registerUser = async (req, res) => {
   try {
-    const { Name, Email, Password } = req.body;
+    const { Name, Email,usertype,Password } = req.body;
 
     if (!Password || Password.length < 6) {
       return insufficientParameters(res,"Password is required and should be at least 6 characters long");
@@ -26,6 +26,7 @@ const registerUser = async (req, res) => {
     const user = await User.create({
       Name,
       Email,
+      usertype,
       Password: hashedPassword
     });
 
@@ -48,12 +49,12 @@ const loginUser = async (req, res) => {
 
     const match = await comparePassword(Password, user.Password);
     if (match) {
-      const generateToken = await generateAccessToken(user.Email);
+      const generateToken = await generateAccessToken(user.Email,user.usertype);
   
       if (!generateToken) {
         return failureResponse('Something went wrong with token generating', res);
       } else {
-        return successResponse('Successfully Login', { token: generateToken, Email: user.Email }, res);
+        return successResponse('Successfully Login', { token: generateToken, Email: user.Email,usertype:user.usertype }, res);
       }
     } else {
       return forbiddenError(res, "Password Not Match");

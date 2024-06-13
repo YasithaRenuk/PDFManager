@@ -3,11 +3,12 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const generateAccessToken = (userEmail) => {
+const generateAccessToken = (userID,usertype) => {
   // token will be expired within 2hrs
   const token = jwt.sign(
     {
-      id: userEmail,
+      id: userID,
+      usertype : usertype
     },
     process.env.TOKEN_SECRET,
     { expiresIn: 60 * 60 }
@@ -30,11 +31,21 @@ const authenticateToken = (req, res, next) => {
         console.log(err);
         
         if (err) return res.sendStatus(403);
+
+        const userType = user.usertype;
+        
+        //Check the user type here
+        if (userType == 'admin' || userType == 'faculty' || userType == 'student') {
+          return res.sendStatus(403);
+        }
+
         req.user = user;
+        req.userType = userType
 
         next();
       }
     );
+    
   }catch(error){
     console.log(error)
   }

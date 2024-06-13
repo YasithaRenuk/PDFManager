@@ -5,9 +5,10 @@ const schema ={
     properties:{
         Name:{type:'string'},
         Email:{type:'string',format:'email'},
+        usertype: { type: 'string', enum: ['admin', 'user'] },
         Password:{type:'string'}
     },
-    required:['Name','Email','Password'],
+    required:['Name','Email','usertype','Password'],
     additionalProperties:false,
 };
 

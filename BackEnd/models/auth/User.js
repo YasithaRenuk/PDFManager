@@ -12,6 +12,10 @@ const UserSchema = new Schema({
         unique:true,
         require:true
     },
+    usertype:{
+        type:String,
+        require:true
+    },
     Password:{
         type:String,
         require:true
