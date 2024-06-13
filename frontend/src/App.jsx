@@ -24,7 +24,11 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/dashboard' element={<DashBord />} />
+
+          <Route path='/dashboard' element={<DashBord />}>
+
+          </Route>
+
         </Routes>
       </UserContextProvider>
     </BrowserRouter>

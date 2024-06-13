@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { UserContext } from '../../context/userContext';
-import { useContext } from 'react';
 import { Grid, GridItem, Box, Heading } from '@chakra-ui/react';
+import { Outlet } from 'react-router-dom';  // Import Outlet from react-router-dom
+import Navbar from '../components/Navbar';
 
 export default function DashBord() {
     const { user } = useContext(UserContext);
@@ -16,28 +17,19 @@ export default function DashBord() {
             bg="purple.200"
         >
             <GridItem bg="gray.300" colSpan={1} rowSpan={1}>
-                <Box p={4} h="100%" boxShadow="md">  {/* Add boxShadow here */}
+                <Box p={4} h="100%" boxShadow="md"> 
                     <Heading as="h1" size="xl">
-                        Dashboard
+                        <Navbar />
                     </Heading>
-                    {/* Additional dashboard content */}
                 </Box>
             </GridItem>
             <GridItem bg="gray.100" colSpan={1} rowSpan={1}>
-                <Box p={4} h="100%" boxShadow="md">  {/* Add boxShadow here */}
+                <Box p={4} h="100%" boxShadow="md"> 
                     <Heading as="h2" size="lg">
-                        {!!user && (
-                            <Box mt={4}>
-                                <Heading as="h2" size="md">
-                                    Hi {user.Email}!
-                                </Heading>
-                                {/* Additional dashboard content */}
-                            </Box>
-                        )}
+                    <Outlet /> {/* Outlet for nested routes */}
                     </Heading>
                 </Box>
             </GridItem>
         </Grid>
     );
 }
-  
