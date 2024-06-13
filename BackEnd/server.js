@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routers/auth.routes");
-
+const PDFManeger = require('./routers/PDFManager.routes')
 const app = express();
 
 const PORT = process.env.PORT || 8070;
@@ -30,7 +30,7 @@ mongoose
 
 // Routes
 app.use("/auth", authRouter);
-
+app.use("/PDFmanagemet",PDFManeger)
 
 app.listen(PORT, () => {
   console.log(`Server is up and running on port ${PORT}`);
