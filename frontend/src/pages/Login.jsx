@@ -79,6 +79,16 @@ export default function Login() {
             </Button>
           </Stack>
         </form>
+        <Text color="gray.600" textAlign="center">
+          Dont'have account?{' '}
+          <Button
+            colorScheme="purple"
+            variant="link"
+            onClick={() => navigate('/register')}
+          >
+            Register
+          </Button>
+        </Text>
       </Stack>
     </Center>
   );

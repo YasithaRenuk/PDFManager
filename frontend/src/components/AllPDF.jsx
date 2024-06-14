@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, Heading, Text, Stack, StackDivider } from '@chakra-ui/react';
+import { Box, Heading, Text, Stack, StackDivider, Button } from '@chakra-ui/react';
 import { UserContext } from '../../context/userContext';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -16,40 +16,34 @@ export default function AllPDF() {
     useEffect(() => {
         const fetchPDFs = async () => {
             if (user && user.token && user.usertype) {
-                if(user.usertype=="admin"){
-                    try {
-                        const response = await axios.get('http://localhost:8070/PDFmanagement/getallPDFAdmin', {
-                            headers: {
-                                'Authorization': `Bearer ${user.token}`
-                            }
-                        });
-                        setPdfs(response.data.DATA); // Assuming DATA contains the array of PDFs
-                    } catch (error) {
-                        toast.error('Failed to fetch PDFs');
-                        console.error('Error fetching PDFs:', error);
-                    } finally {
-                        setIsLoading(false);
-                    }
-                }else{
-                    try {
-                        const response = await axios.get('http://localhost:8070/PDFmanagement/getallPDFbyEmail', {
-                            headers: {
-                                'Authorization': `Bearer ${user.token}`
-                            }
-                        });
-                        setPdfs(response.data.DATA); // Assuming DATA contains the array of PDFs
-                    } catch (error) {
-                        toast.error('Failed to fetch PDFs');
-                        console.error('Error fetching PDFs:', error);
-                    } finally {
-                        setIsLoading(false);
-                    }
+                let endpoint;
+                if (user.usertype === "admin") {
+                    endpoint = 'PDFmanagement/getallPDFAdmin';
+                } else {
+                    endpoint = 'PDFmanagement/getallPDFbyEmail';
+                }
+                try {
+                    const response = await axios.get(`http://localhost:8070/${endpoint}`, {
+                        headers: {
+                            'Authorization': `Bearer ${user.token}`
+                        }
+                    });
+                    setPdfs(response.data.DATA); // Assuming DATA contains the array of PDFs
+                } catch (error) {
+                    toast.error('Failed to fetch PDFs');
+                    console.error('Error fetching PDFs:', error);
+                } finally {
+                    setIsLoading(false);
                 }
             }
         };
 
         fetchPDFs();
     }, [user, navigate]);
+
+    const handleViewPDF = (_id) => {
+        navigate(`/dashboard/viewPDF/${_id}`);
+    };
 
     return (
         <Box p={5}>
@@ -60,7 +54,8 @@ export default function AllPDF() {
                 <Stack spacing={4} divider={<StackDivider />} mb={4}>
                     {pdfs.map((pdf, index) => (
                         <Box key={pdf._id} p={5} shadow="md" borderWidth="1px">
-                            <PDFcard _id ={pdf._id} FileName = {pdf.FileName} FileSize={pdf.FileSize} createdAt={pdf.createdAt}/>
+                            <PDFcard _id={pdf._id} FileName={pdf.FileName} FileSize={pdf.FileSize} createdAt={pdf.createdAt} />
+                            <Button mt={2} colorScheme="blue" onClick={() => handleViewPDF(pdf._id)}>View PDF</Button>
                         </Box>
                     ))}
                 </Stack>
