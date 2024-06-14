@@ -1,22 +1,34 @@
-import React, { useContext } from 'react';
+// Navbar.jsx
+
+import React, { useContext, useState } from 'react';
 import { Box, Flex, Button, Heading } from '@chakra-ui/react';
 import { UserContext } from '../../context/userContext';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import AddPDFModal from '../components/AddPDFModal';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const [isAddPDFModalOpen, setAddPDFModalOpen] = useState(false);
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
     toast.success('Logout successful!');
-    navigate('/login')
+    navigate('/login');
   };
 
   const handleShowallPDF = () => {
-    navigate('./allPDFs')
+    navigate('./allPDFs');
+  };
+
+  const handleAddPDFModalOpen = () => {
+    setAddPDFModalOpen(true);
+  };
+
+  const handleAddPDFModalClose = () => {
+    setAddPDFModalOpen(false);
   };
 
   return (
@@ -29,7 +41,7 @@ export default function Navbar() {
           <Button colorScheme="blue" mr={4} onClick={handleShowallPDF}>
             Show all PDF
           </Button>
-          <Button colorScheme="blue" mr={4}>
+          <Button colorScheme="blue" mr={4} onClick={handleAddPDFModalOpen}>
             Add PDF file
           </Button>
           <Button colorScheme="red" onClick={handleLogout}>
@@ -37,6 +49,9 @@ export default function Navbar() {
           </Button>
         </Flex>
       </Flex>
+
+      {/* Add PDF Modal */}
+      <AddPDFModal isOpen={isAddPDFModalOpen} onClose={handleAddPDFModalClose} />
     </Box>
   );
 }
