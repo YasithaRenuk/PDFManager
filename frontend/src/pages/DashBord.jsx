@@ -1,18 +1,31 @@
-import React, { useContext } from 'react';
-import { UserContext } from '../../context/userContext';
-import { Grid, GridItem, Box, Heading } from '@chakra-ui/react';
-import { Outlet } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import React, { useContext, useEffect } from "react";
+import { UserContext } from "../../context/userContext";
+import { Grid, GridItem, Box, Heading } from "@chakra-ui/react";
+import { Outlet, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function DashBord() {
-  const { user } = useContext(UserContext);
+  const { user, loading } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  // Redirect to login page if user is not logged in and loading is complete
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/login");
+    }
+  }, [user, loading, navigate]);
+
+  // Render a loading spinner or some placeholder while checking the user state
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Grid
       h="100vh"
       templateRows="auto 1fr"
       templateColumns="1fr"
-      gap={4}
+      gap={1}
       p={4}
       bg="purple.200"
     >

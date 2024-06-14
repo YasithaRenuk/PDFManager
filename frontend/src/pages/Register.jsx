@@ -1,23 +1,31 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom'; // Ensure this import statement is correct
-import { Center, Stack, Heading, Text, Input, Button, Radio, RadioGroup } from '@chakra-ui/react';
+import React, { useState } from "react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import {
+  Center,
+  Stack,
+  Heading,
+  Text,
+  Input,
+  Button,
+  Radio,
+  RadioGroup,
+} from "@chakra-ui/react";
 
 export default function Register() {
-  const navigate = useNavigate(); // This line should work properly now
+  const navigate = useNavigate();
   const [data, setData] = useState({
-    Name: '',
-    Email: '',
-    usertype: 'user', // Default user type
-    Password: '',
+    Name: "",
+    Email: "",
+    usertype: "user", // Default user type
+    Password: "",
   });
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
-    // Clear error message when user starts typing in the field
-    setErrors({ ...errors, [e.target.name]: '' });
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const registerUser = async (e) => {
@@ -27,16 +35,16 @@ export default function Register() {
 
     // Validate form fields before submitting
     if (!Name.trim()) {
-      formErrors.Name = 'Name is required';
+      formErrors.Name = "Name is required";
     }
     if (!Email.trim()) {
-      formErrors.Email = 'Email is required';
+      formErrors.Email = "Email is required";
     }
     if (!Password.trim()) {
-      formErrors.Password = 'Password is required';
+      formErrors.Password = "Password is required";
     }
     if (Password.length < 6) {
-      formErrors.Password = 'Password should be at least 6 characters long';
+      formErrors.Password = "Password should be at least 6 characters long";
     }
 
     if (Object.keys(formErrors).length > 0) {
@@ -45,31 +53,33 @@ export default function Register() {
     }
 
     try {
-      const response = await axios.post('/auth/register', {
+      const response = await axios.post("/auth/register", {
         Name,
         Email,
         usertype,
         Password,
       });
       const responseData = response.data;
-      if (responseData.STATUS === 'SUCCESS') {
-        setData({ Name: '', Email: '', Password: '', usertype: 'user' });
-        toast.success('Registration successful. Welcome!');
-        navigate('/login');
+      if (responseData.STATUS === "SUCCESS") {
+        setData({ Name: "", Email: "", Password: "", usertype: "user" });
+        toast.success("Registration successful. Welcome!");
+        navigate("/login");
       } else {
         toast.error(responseData.MESSAGE);
       }
     } catch (error) {
-      console.error('Error during registration:', error);
+      console.error("Error during registration:", error);
       if (error.response) {
         const { data } = error.response;
-        if (data.STATUS === 'FAILURE') {
+        if (data.STATUS === "FAILURE") {
           toast.error(data.MESSAGE);
         } else {
-          toast.error('An error occurred during registration. Please try again.');
+          toast.error(
+            "An error occurred during registration. Please try again."
+          );
         }
       } else {
-        toast.error('Network error. Please check your internet connection.');
+        toast.error("Network error. Please check your internet connection.");
       }
     }
   };
@@ -110,27 +120,26 @@ export default function Register() {
               isInvalid={!!errors.Password}
             />
             {errors.Password && <Text color="red.500">{errors.Password}</Text>}
-            <RadioGroup defaultValue="user" onChange={(value) => setData({ ...data, usertype: value })}>
+            <RadioGroup
+              defaultValue="user"
+              onChange={(value) => setData({ ...data, usertype: value })}
+            >
               <Stack direction="row">
                 <Radio value="user">User</Radio>
                 <Radio value="admin">Admin</Radio>
               </Stack>
             </RadioGroup>
-            <Button
-              size="lg"
-              colorScheme="purple"
-              type="submit"
-            >
+            <Button size="lg" colorScheme="purple" type="submit">
               Register
             </Button>
           </Stack>
         </form>
         <Text color="gray.600" textAlign="center">
-          Already have an account?{' '}
+          Already have an account?{" "}
           <Button
             colorScheme="purple"
             variant="link"
-            onClick={() => navigate('/login')}
+            onClick={() => navigate("/login")}
           >
             Log in
           </Button>

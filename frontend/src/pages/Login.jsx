@@ -1,23 +1,23 @@
-import React, { useState, useContext } from 'react';
-import axios from 'axios';
-import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
-import { Center, Stack, Heading, Text, Input, Button } from '@chakra-ui/react';
-import { FaEnvelope, FaLock } from 'react-icons/fa';
-import { UserContext } from '../../context/userContext';
+import React, { useState, useContext } from "react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { Center, Stack, Heading, Text, Input, Button } from "@chakra-ui/react";
+import { FaEnvelope, FaLock } from "react-icons/fa";
+import { UserContext } from "../../context/userContext";
 
 export default function Login() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const [data, setData] = useState({
-    Email: '',
-    Password: '',
+    Email: "",
+    Password: "",
   });
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: '' });
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const loginUser = async (e) => {
@@ -25,21 +25,21 @@ export default function Login() {
     const { Email, Password } = data;
 
     try {
-      const response = await axios.post('/auth/login', { Email, Password });
+      const response = await axios.post("/auth/login", { Email, Password });
       const responseData = response.data;
 
-      if (responseData.STATUS === 'SUCCESS') {
+      if (responseData.STATUS === "SUCCESS") {
         const { token, Email, usertype } = responseData.DATA;
         setUser({ token, Email, usertype });
-        setData({ Email: '', Password: '' });
-        toast.success('Login successful!');
-        navigate('/dashboard');
+        setData({ Email: "", Password: "" });
+        toast.success("Login successful!");
+        navigate("/dashboard");
       } else {
         toast.error(responseData.MESSAGE);
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      toast.error('Failed to log in. Please try again.');
+      console.error("Error during login:", error);
+      toast.error("Failed to log in. Please try again.");
     }
   };
 
@@ -80,11 +80,11 @@ export default function Login() {
           </Stack>
         </form>
         <Text color="gray.600" textAlign="center">
-          Dont'have account?{' '}
+          Don't have a account?{" "}
           <Button
             colorScheme="purple"
             variant="link"
-            onClick={() => navigate('/register')}
+            onClick={() => navigate("/register")}
           >
             Register
           </Button>
