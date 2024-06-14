@@ -1,11 +1,12 @@
+// userContext.js
 import React, { createContext, useState, useEffect } from 'react';
 
 export const UserContext = createContext(null);
 
-export function UserContextProvider({ children }) {
+export const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Check if user data exists in localStorage on component mount
+  // Check localStorage for existing user data on component mount
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -27,4 +28,4 @@ export function UserContextProvider({ children }) {
       {children}
     </UserContext.Provider>
   );
-}
+};
