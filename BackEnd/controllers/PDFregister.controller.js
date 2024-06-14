@@ -91,7 +91,7 @@ const getAllFilesByEmail = async (req, res) => {
 
 const getAllFiles = async (req, res) => {
   const userType = req.userType;
-  if (!(userType == "Admin")) {
+  if (!(userType == "admin")) {
     return forbiddenError(res, "Not Authorized");
   }
   try {

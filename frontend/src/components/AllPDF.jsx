@@ -15,23 +15,36 @@ export default function AllPDF() {
 
     useEffect(() => {
         const fetchPDFs = async () => {
-            if (user && user.token) {
-                try {
-                    const response = await axios.get('http://localhost:8070/PDFmanagement/getallPDFbyEmail', {
-                        headers: {
-                            'Authorization': `Bearer ${user.token}`
-                        }
-                    });
-                    setPdfs(response.data.DATA); // Assuming DATA contains the array of PDFs
-                } catch (error) {
-                    toast.error('Failed to fetch PDFs');
-                    console.error('Error fetching PDFs:', error);
-                } finally {
-                    setIsLoading(false);
+            if (user && user.token && user.usertype) {
+                if(user.usertype=="admin"){
+                    try {
+                        const response = await axios.get('http://localhost:8070/PDFmanagement/getallPDFAdmin', {
+                            headers: {
+                                'Authorization': `Bearer ${user.token}`
+                            }
+                        });
+                        setPdfs(response.data.DATA); // Assuming DATA contains the array of PDFs
+                    } catch (error) {
+                        toast.error('Failed to fetch PDFs');
+                        console.error('Error fetching PDFs:', error);
+                    } finally {
+                        setIsLoading(false);
+                    }
+                }else{
+                    try {
+                        const response = await axios.get('http://localhost:8070/PDFmanagement/getallPDFbyEmail', {
+                            headers: {
+                                'Authorization': `Bearer ${user.token}`
+                            }
+                        });
+                        setPdfs(response.data.DATA); // Assuming DATA contains the array of PDFs
+                    } catch (error) {
+                        toast.error('Failed to fetch PDFs');
+                        console.error('Error fetching PDFs:', error);
+                    } finally {
+                        setIsLoading(false);
+                    }
                 }
-            } else {
-                toast.error('User not authenticated');
-                navigate('/login');
             }
         };
 
